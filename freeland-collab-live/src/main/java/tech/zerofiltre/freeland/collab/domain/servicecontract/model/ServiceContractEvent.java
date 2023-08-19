@@ -14,11 +14,11 @@ public class ServiceContractEvent {
     private final String agencySiren;
     private final float rateValue;
     private final Rate.Frequency rateFrequency;
-    private final Currency rateCurrency;
+    private final Rate.Currency rateCurrency;
     private final float serviceFeesRate;
     private final Date startDate;
 
-    public ServiceContractEvent(long serviceContractNumber, String clientName, String clientSiren, String freelancerName, String freelancerSiren, String agencyName, String agencySiren, float rateValue, Rate.Frequency rateFrequency, Currency rateCurrency, float serviceFeesRate, Date startDate) {
+    public ServiceContractEvent(long serviceContractNumber, String clientName, String clientSiren, String freelancerName, String freelancerSiren, String agencyName, String agencySiren, float rateValue, Rate.Frequency rateFrequency, Rate.Currency rateCurrency, float serviceFeesRate, Date startDate) {
         this.serviceContractNumber = serviceContractNumber;
         this.clientName = clientName;
         this.clientSiren = clientSiren;
@@ -69,7 +69,7 @@ public class ServiceContractEvent {
         return rateFrequency;
     }
 
-    public Currency getRateCurrency() {
+    public Rate.Currency getRateCurrency() {
         return rateCurrency;
     }
 

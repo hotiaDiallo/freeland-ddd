@@ -7,6 +7,7 @@ import tech.zerofiltre.freeland.collab.domain.servicecontract.ServiceContractPro
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.Optional;
 
 public class ServiceContract {
     private ServiceContractProvider serviceContractProvider;
@@ -72,6 +73,42 @@ public class ServiceContract {
 
     public static ServiceContractBuilder builder(){
         return new ServiceContractBuilder();
+    }
+
+    public ServiceContract start(){
+        serviceContractId = serviceContractProvider.registerContract(this).getServiceContractId();
+        return this;
+    }
+
+    public Optional<ServiceContract> of(ServiceContractId serviceContractId){
+        Optional<ServiceContract> result = serviceContractProvider.serviceContractOfId(serviceContractId);
+        result.ifPresent(serviceContract -> {
+            serviceContract.serviceContractProvider = this.serviceContractProvider;
+            serviceContract.serviceContractNotificationProvider = this.serviceContractNotificationProvider;
+        });
+        return result;
+    }
+
+    public void notifyServiceContractStarted(){
+        ServiceContractStarted event = new ServiceContractStarted(
+                serviceContractId.getContractNumber(),
+                clientId.getName(),
+                clientId.getSiren(),
+                wagePortageAgreement.getFreelancerId().getName(),
+                wagePortageAgreement.getFreelancerId().getSiren(),
+                wagePortageAgreement.getAgencyId().getName(),
+                wagePortageAgreement.getAgencyId().getSiren(),
+                rate.getValue(),
+                rate.getFrequency(),
+                rate.getCurrency(),
+                wagePortageAgreement.getServiceFeesRate(),
+                this.getStartDate()
+        );
+        notify(event);
+    }
+
+    private void notify(ServiceContractEvent serviceContractEvent){
+        serviceContractNotificationProvider.notify(serviceContractEvent);
     }
 
     public static class ServiceContractBuilder{

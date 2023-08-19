@@ -3,6 +3,8 @@ package tech.zerofiltre.freeland.collab.domain.agency.model;
 import tech.zerofiltre.freeland.collab.domain.Address;
 import tech.zerofiltre.freeland.collab.domain.agency.AgencyProvider;
 
+import java.util.Optional;
+
 public class Agency {
     private AgencyId agencyId;
     private String description;
@@ -41,6 +43,17 @@ public class Agency {
 
     public static AgencyBuilder builder(){
         return new AgencyBuilder();
+    }
+
+    public Agency register(){
+        agencyProvider.register(this);
+        return this;
+    }
+
+    public Optional<Agency> of(AgencyId agencyId){
+        Optional<Agency> result = agencyProvider.agencyOfId(agencyId);
+        result.ifPresent(agency -> agency.agencyProvider = this.agencyProvider);
+        return result;
     }
 
 

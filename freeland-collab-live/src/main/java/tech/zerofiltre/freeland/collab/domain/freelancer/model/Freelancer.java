@@ -5,6 +5,7 @@ import tech.zerofiltre.freeland.collab.domain.freelancer.FreelancerProvider;
 import tech.zerofiltre.freeland.collab.domain.servicecontract.model.WagePortageAgreementId;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Freelancer {
 
@@ -53,6 +54,12 @@ public class Freelancer {
 
     public List<Skill> getSkills() {
         return skills;
+    }
+
+    public Optional<Freelancer> of(FreelancerId freelancerId) {
+        Optional<Freelancer> result = freelancerProvider.freelancerOfId(freelancerId);
+        result.ifPresent(freelancer -> freelancer.freelancerProvider = this.freelancerProvider);
+        return result;
     }
 
     public static class FreelancerBuilder {

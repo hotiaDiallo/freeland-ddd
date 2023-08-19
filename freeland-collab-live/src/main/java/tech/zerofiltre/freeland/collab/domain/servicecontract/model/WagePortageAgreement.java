@@ -6,6 +6,7 @@ import tech.zerofiltre.freeland.collab.domain.servicecontract.WagePortageAgreeme
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.Optional;
 
 public class WagePortageAgreement {
     private WagePortageAgreementProvider wagePortageAgreementProvider;
@@ -61,6 +62,16 @@ public class WagePortageAgreement {
         this.startDate = builder.startDate != null ? builder.startDate : new Date();
         this.endDate = builder.endDate != null ? builder.endDate : new Date(startDate.getTime() + Duration.ofDays(180).getSeconds() * 1000);
         this.wagePortageAgreementProvider = builder.wagePortageAgreementProvider;
+    }
+
+    public WagePortageAgreement register() {
+        return wagePortageAgreementProvider.registerWagePortageAgreement(this);
+    }
+
+    public Optional<WagePortageAgreement> of(WagePortageAgreementId wagePortageAgreementId) {
+        Optional<WagePortageAgreement> agreement = wagePortageAgreementProvider.wagePortageAgreementOfId(wagePortageAgreementId);
+        agreement.ifPresent(wagePortageAgreement -> wagePortageAgreement.wagePortageAgreementProvider = wagePortageAgreementProvider);
+        return agreement;
     }
 
     public static class WagePortageAgreementBuilder{
